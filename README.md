@@ -84,6 +84,13 @@ Files under `CSV/` supply thread data (`ignoreFirstLine=true`, recycled, shared 
 - For distributed runs: JMeter servers listening on the remotes listed in the `.cmd` files
 - CSV paths in the plans currently use a Windows share (`N:\ITMG\...`). Update `csvPath` (or copy CSVs and point to a local path) before running elsewhere.
 
+## Local smoke test
+
+If you copy this repo to  
+`C:\Users\victor_yt_lam\Documents\DCS\DCS Upgrade(Local)\LoadTest\DFCS`,  
+use the pack under `local\` (1 thread, 60s, `CSV\local_users.csv`, no remotes).  
+See `local/README_LOCAL.md`.
+
 ## How to run
 
 ### Option A — Windows batch (distributed, non-GUI)
