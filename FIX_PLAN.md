@@ -166,9 +166,9 @@ before calling `jmeter.bat`. Prefer writing the `.jtl` into that folder after it
 
 ## Done when
 
-- [ ] `DFCS.cmd` creates output dir and runs without line-continuation errors
+- [ ] `DFCS_PrePro.cmd` / `DFCS_TRN.cmd` create output dir and run without line-continuation errors
 - [ ] CSRF tokens extracted dynamically; login succeeds for multiple iterations
-- [ ] UAT and PREPRO both define `duration` (and hosts are confirmed)
+- [ ] UAT and PrePro/TRN both define `duration` (and hosts are confirmed)
 - [ ] Cookies cleared (or proven safe) across iterations
 - [ ] Assertions fail the sample on login/token/takeover errors
 - [ ] README updated with any path/property changes
