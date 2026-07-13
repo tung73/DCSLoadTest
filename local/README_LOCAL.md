@@ -53,6 +53,35 @@ After login, the script also posts CSV fields elsewhere:
 
 For GUI debugging: run `local\open_PrePro_local_gui.cmd`, then use **View Results Tree**.
 
+### Troubleshooting: `Error generating the report` / `JsonExporter` NPE
+
+JMeter finished the test, then crashed while building the HTML dashboard. Common causes:
+
+1. **`results.jtl` has no samples** (only a header, or empty) — report code NPEs on null stats.
+2. **`-o report` folder already exists** — use a new folder or delete the old one first.
+
+Check samples:
+
+```bat
+dir results.jtl
+type results.jtl
+```
+
+If you only see a header line (or nothing), the test did not record requests. Then check earlier log lines for:
+
+- `java.io.FileNotFoundException` / CSV path
+- connection / SSL / unknown host to `trn.as.dcs.customs.hksarg:8444`
+
+Safer manual run (fresh report folder, report only if samples exist):
+
+```bat
+"C:\Shares\apache-jmeter-5.5\bin\jmeter.bat" -n -t "DFCS_TRN_local.jmx" -l results.jtl
+"C:\Shares\apache-jmeter-5.5\bin\jmeter.bat" -g results.jtl -o report_%RANDOM%
+```
+
+Also confirm `csvPath` in the JMX still points to your real file, e.g.  
+`...\LoadTest\DFCS\CSV\local_users.csv` (update it if you renamed `local` → `localTest`; CSV is usually still under `DFCS\CSV`).
+
 ### Troubleshooting: `Unable to access jarfile ...\binApacheJMeter.jar`
 
 That missing `\` means JMeter was started with a bad working directory / path join.
