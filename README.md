@@ -16,6 +16,7 @@ The suite simulates concurrent officers logging in, selecting a control point, p
 │   ├── pre_pro_10.12.116.65.csv   # Users for load generator 10.12.116.65
 │   ├── pre_pro_10.12.134.251.csv  # Users for load generator 10.12.134.251
 │   └── dfcs.prd.csv               # Sample / alternate user data
+├── local/                # Local smoke-test pack (see local/README_LOCAL.md)
 ├── FIX_PLAN.md           # Known issues / fix plan (not applied yet)
 └── README.md
 ```
@@ -82,6 +83,13 @@ Files under `CSV/` supply thread data (`ignoreFirstLine=true`, recycled, shared 
 - Network access to the target host/port (`8443` for PrePro/UAT, `8444` for TRN)
 - For distributed runs: JMeter servers listening on the remotes listed in the `.cmd` files
 - CSV paths in the plans currently use a Windows share (`N:\ITMG\...`). Update `csvPath` (or copy CSVs and point to a local path) before running elsewhere.
+
+## Local smoke test
+
+If you copy this repo to  
+`C:\Users\victor_yt_lam\Documents\DCS\DCS Upgrade(Local)\LoadTest\DFCS`,  
+use the pack under `local\` (1 thread, 60s, `CSV\local_users.csv`, no remotes).  
+See `local/README_LOCAL.md`.
 
 ## How to run
 
