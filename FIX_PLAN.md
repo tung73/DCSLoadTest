@@ -1,23 +1,23 @@
 # DFCS load-test bug review and fix plan
 
-Review of `DFCS.cmd`, `DFCS.jmx`, and `CSV/`. Issues are ordered by severity (P0 = will break or corrupt a run; P3 = hygiene).
+Review of the DFCS runners/plans (`DFCS_PrePro.cmd` / `DFCS_PrePro.jmx`, `DFCS_TRN.cmd` / `DFCS_TRN.jmx`) and `CSV/`. Issues are ordered by severity (P0 = will break or corrupt a run; P3 = hygiene). Most findings apply to both JMX files unless noted.
 
 ## Findings summary
 
 | ID | Severity | Area | Issue |
 |----|----------|------|--------|
-| B1 | P0 | `DFCS.jmx` | Hardcoded `__RequestVerificationToken` values from recording |
-| B2 | P0 | `DFCS.jmx` | UAT profile missing `duration` while scheduler is on |
-| B3 | P0 | `DFCS.cmd` | Output folder never created before writing `.jtl` |
-| B4 | P1 | `DFCS.cmd` | Trailing `^` on last line; fragile timestamp |
-| B5 | P1 | `DFCS.jmx` | Cookies not cleared between login/logout iterations |
-| B6 | P1 | `DFCS.jmx` | Hardcoded `machineID=W10581` for every thread |
-| B7 | P1 | `DFCS.jmx` | PREPRO profile targets `prd.as.dcs...` host |
-| B8 | P2 | `DFCS.jmx` | Referer headers embed stale session + fixed `ctrl_pt_cd=APP` |
-| B9 | P2 | `DFCS.jmx` | `port` / `scheme` UDVs unused or inconsistent |
+| B1 | P0 | `*.jmx` | Hardcoded `__RequestVerificationToken` values from recording |
+| B2 | P0 | `DFCS_PrePro.jmx` | UAT profile missing `duration` while scheduler is on |
+| B3 | P0 | `*.cmd` | Output folder never created before writing `.jtl` |
+| B4 | P1 | `*.cmd` | Trailing `^` on last line; fragile timestamp |
+| B5 | P1 | `*.jmx` | Cookies not cleared between login/logout iterations |
+| B6 | P1 | `*.jmx` | Hardcoded `machineID=W10581` for every thread |
+| B7 | P1 | `DFCS_PrePro.jmx` | PREPRO profile targets `prd.as.dcs...` host |
+| B8 | P2 | `*.jmx` | Referer headers embed stale session + fixed `ctrl_pt_cd=APP` |
+| B9 | P2 | `*.jmx` | `port` / `scheme` UDVs unused or inconsistent |
 | B10 | P2 | `CSV/` | `dfcs.prd.csv` columns don’t match CSV Data Set |
-| B11 | P2 | `DFCS.jmx` | Empty CSV `delimiter`; no assertions / extract failure handling |
-| B12 | P3 | `DFCS.jmx` | Disabled recorder leftovers; plaintext password in plan |
+| B11 | P2 | `*.jmx` | Empty CSV `delimiter`; no assertions / extract failure handling |
+| B12 | P3 | `*.jmx` | Disabled recorder leftovers; plaintext password in plan |
 
 ---
 
@@ -44,9 +44,9 @@ Review of `DFCS.cmd`, `DFCS.jmx`, and `CSV/`. Issues are ordered by severity (P0
 
 **Fix:** Add `duration` to the UAT variable set (e.g. `600` or the intended UAT value). Optionally set a Test Plan–level default so a missing profile cannot blank it out.
 
-### B3. `DFCS.cmd` writes `.jtl` into a non-existent directory
+### B3. Runners write `.jtl` into a non-existent directory
 
-**Where:**
+**Where:** `DFCS_PrePro.cmd` / `DFCS_TRN.cmd`
 ```bat
 set _logFile=%cd%\%_system%_output_%timestamp%\%_system%_log_%timestamp%.jtl
 set _output=%cd%\%_system%_output_%timestamp%
@@ -150,11 +150,11 @@ before calling `jmeter.bat`. Prefer writing the `.jtl` into that folder after it
 ## Suggested implementation order
 
 ```text
-1. DFCS.cmd     → B3, B4          (runner must work before analyzing results)
-2. DFCS.jmx     → B1, B2, B5      (tokens, UAT duration, cookies)
-3. DFCS.jmx     → B6, B8, B9, B11 (identity, headers, defaults, assertions)
-4. Config/CSV   → B7, B10, B12    (env naming, CSV cleanup, secrets)
-5. Dry-run      → 1 thread GUI on UAT, then short PREPRO soak, then full -R run
+1. *.cmd           → B3, B4          (runner must work before analyzing results)
+2. *.jmx           → B1, B2, B5      (tokens, UAT duration, cookies)
+3. *.jmx           → B6, B8, B9, B11 (identity, headers, defaults, assertions)
+4. Config/CSV      → B7, B10, B12    (env naming, CSV cleanup, secrets)
+5. Dry-run         → 1 thread GUI on UAT, then short PrePro/TRN soak, then full -R run
 ```
 
 ## Out of scope / needs product confirmation
