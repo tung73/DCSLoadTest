@@ -40,15 +40,27 @@ After login, the script also posts CSV fields elsewhere:
 ## How to run
 
 1. Copy repo to the `DFCS` folder above (keep `CSV\` and `local\` intact).
-2. Confirm you can reach the target host (PrePro/UAT `:8443`, TRN `:8444`).
-3. Confirm `DFCS001` / `DFCS002` exist and password `1234abcD` is valid (or edit password in the JMX login sampler).
-4. Double-click one of:
+2. Confirm JMeter exists:
+   - `C:\Shares\apache-jmeter-5.5\bin\jmeter.bat`
+   - `C:\Shares\apache-jmeter-5.5\bin\ApacheJMeter.jar`
+3. Confirm you can reach the target host (PrePro/UAT `:8443`, TRN `:8444`).
+4. Confirm `DFCS001` / `DFCS002` exist and password `1234abcD` is valid (or edit password in the JMX login sampler).
+5. Double-click one of:
    - `local\run_PrePro_local.cmd`
    - `local\run_UAT_local.cmd`
    - `local\run_TRN_local.cmd`
-5. Open the HTML report under `local\output_<Env>_<timestamp>\report\index.html`.
+6. Open the HTML report under `local\output_<Env>_<timestamp>\report\index.html`.
 
 For GUI debugging: run `local\open_PrePro_local_gui.cmd`, then use **View Results Tree**.
+
+### Troubleshooting: `Unable to access jarfile ...\binApacheJMeter.jar`
+
+That missing `\` means JMeter was started with a bad working directory / path join.
+
+- Re-pull/copy the updated `run_*_local.cmd` files (they call `"%JMETER_HOME%\bin\jmeter.bat"` by full path).
+- Confirm `C:\Shares\apache-jmeter-5.5\bin\ApacheJMeter.jar` exists (folder name is `bin`, jar is inside it).
+- Do **not** set `JMETER_HOME` to the `bin` folder; it must be `C:\Shares\apache-jmeter-5.5`.
+- Run the `.cmd` by double-click or from its own folder; do not `cd` into `bin` and run a broken relative call.
 
 ## Local load settings
 
