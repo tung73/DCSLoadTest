@@ -16,6 +16,7 @@ The suite simulates concurrent officers logging in, selecting a control point, p
 │   ├── pre_pro_10.12.116.65.csv   # Users for load generator 10.12.116.65
 │   ├── pre_pro_10.12.134.251.csv  # Users for load generator 10.12.134.251
 │   └── dfcs.prd.csv               # Sample / alternate user data
+├── local/                # Local smoke-test pack (see local/README_LOCAL.md)
 ├── FIX_PLAN.md           # Known issues / fix plan (not applied yet)
 └── README.md
 ```
